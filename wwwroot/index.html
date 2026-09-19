@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTech - Sistema de Soporte</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            margin-bottom: 15px;
+            color: #1a252f;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+            button:hover {
+                background-color: #34495e;
+            }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+            .btn-danger:hover {
+                background-color: #c0392b;
+            }
+
+        .hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .pagination-container button {
+            background-color: #34495e;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .pagination-container button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        #infoPaginacion {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .btn-accion {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-right: 4px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .btn-estado {
+            background-color: #2980b9;
+        }
+
+        .btn-estado:hover {
+            background-color: #1f618d;
+        }
+
+        .btn-asignar {
+            background-color: #27ae60;
+        }
+
+        .btn-asignar:hover {
+            background-color: #1e8449;
+        }
+
+        /* Modal Simple */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 750px; /* Expande el ancho del modal de bitácora */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: #333333;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .modal-content select, .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .tabla-bitacora {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+            .tabla-bitacora th,
+            .tabla-bitacora td {
+                padding: 10px 12px;
+                text-align: left;
+                border-bottom: 1px solid #e0e0e0;
+                font-size: 14px;
+            }
+
+            .tabla-bitacora th {
+                background-color: #1e293b;
+                color: #ffffff;
+                font-weight: 600;
+            }
+
+            .tabla-bitacora tr:hover {
+                background-color: #f8fafc;
+            }
+
+
+
+        .btn-cancelar {
+            background-color: #7f8c8d;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>GlobalTech - Gestión de Tickets</h1>
+
+        <!-- 1. SECCIÓN DE LOGIN -->
+        <div id="loginSection" class="card">
+            <h2>Iniciar Sesión</h2>
+            <div id="loginError" class="alert alert-error hidden"></div>
+
+            <div class="form-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" value="rolandogj" placeholder="Nombre de usuario">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" value="123" placeholder="******">
+            </div>
+
+            <button onclick="login()">Ingresar</button>
+        </div>
+
+        <!-- 2. SECCIÓN PRINCIPAL (DASHBOARD) -->
+        <div id="dashboardSection" class="card hidden">
+            <div class="user-info">
+                <div>
+                    <strong>Usuario:</strong> <span id="userName"></span> |
+                    <strong>Rol:</strong> <span id="userRole"></span>
+                </div>
+                <button class="btn-danger" onclick="logout()">Cerrar Sesión</button>
+            </div>
+
+            <h2>Tickets Registrados</h2>
+            <button onclick="obtenerTickets()">Actualizar Lista</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Asignado A</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="ticketsTableBody">
+                    <tr><td colspan="6" style="text-align: center;">Cargando tickets...</td></tr>
+                </tbody>
+            </table>
+
+            <div class="pagination-container">
+                <button id="btnAnterior" onclick="cambiarPagina(-1)" disabled>&laquo; Anterior</button>
+                <span id="infoPaginacion">Página 1 de 1 (0 registros)</span>
+                <button id="btnSiguiente" onclick="cambiarPagina(1)" disabled>Siguiente &raquo;</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL ACCIONES (CAMBIAR ESTADO / ASIGNAR TÉCNICO) -->
+    <div id="modalAccion" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitulo">Actualizar Ticket</h3>
+            <input type="hidden" id="modalTicketId" />
+            <input type="hidden" id="modalTipoAccion" />
+
+            <div id="grupoEstado">
+                <label for="selectEstado">Nuevo Estado:</label>
+                <select id="selectEstado">
+                    <option value="Abierto">Abierto</option>
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Resuelto">Resuelto</option>
+                    <option value="Cerrado">Cerrado</option>
+                </select>
+            </div>
+
+            <div id="grupoTecnico" style="display: none;">
+                <label for="inputTecnico">ID del Técnico / Nombre:</label>
+                <input type="number" id="inputTecnico" placeholder="Ingrese ID del técnico" />
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-accion btn-cancelar" onclick="cerrarModalAccion()">Cancelar</button>
+                <button class="btn-accion btn-estado" onclick="guardarAccionTicket()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Bitácora / Historial -->
+    <div id="modalBitacora" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 style="margin-top: 0;">Historial de Cambios - Ticket #<span id="bitacoraTicketId"></span></h3>
+
+            <div style="max-height: 380px; overflow-y: auto; overflow-x: auto;">
+                <table class="tabla-bitacora">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Estado Anterior</th>
+                            <th>Estado Nuevo</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBitacoraBody">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px; text-align: right;">
+                <button type="button" class="btn-cancelar" onclick="cerrarModalBitacora()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón arriba de la tabla -->
+    <div style="margin-bottom: 15px;">
+        <button class="btn-primario" onclick="abrirModalCrearTicket()">+ Nuevo Ticket</button>
+        <button class="btn-secundario" onclick="obtenerTickets(paginaActual)">Actualizar Lista</button>
+    </div>
+
+    <!-- Modal para Crear Ticket -->
+    <div id="modalCrearTicket" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 style="margin-top: 0;">Crear Nuevo Ticket</h3>
+
+            <form id="formCrearTicket" onsubmit="guardarNuevoTicket(event)">
+                <div style="margin-bottom: 15px;">
+                    <label for="nuevoTitulo" style="display: block; font-weight: bold; margin-bottom: 5px;">Título / Asunto:</label>
+                    <input type="text" id="nuevoTitulo" required placeholder="Ej: Error al imprimir en facturación" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="nuevaDescripcion" style="display: block; font-weight: bold; margin-bottom: 5px;">Descripción detallada:</label>
+                    <textarea id="nuevaDescripcion" rows="4" required placeholder="Describe el problema o requerimiento..." style="width: 100%; padding: 8px; box-sizing: border-box;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="nuevaPrioridad" style="display: block; font-weight: bold; margin-bottom: 5px;">Prioridad:</label>
+                    <select id="nuevaPrioridad" style="width: 100%; padding: 8px;">
+                        <option value="Baja">Baja</option>
+                        <option value="Media" selected>Media</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Critica">Crítica</option>
+                    </select>
+                </div>
+
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCrearTicket()">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Crear Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+                    const API_URL = '/api';
+
+                    let paginaActual = 1;
+                    const tamanoPagina = 10;
+
+                    async function login() {
+                        const nombreUsuario = document.getElementById('username').value;
+                        const password = document.getElementById('password').value;
+                        const errorDiv = document.getElementById('loginError');
+
+                        errorDiv.classList.add('hidden');
+
+                        try {
+                            const response = await fetch(`${API_URL}/auth/login`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    NombreUsuario: nombreUsuario,
+                                    Password: password
+                                })
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                                localStorage.setItem('token', data.token || data.Token);
+                                localStorage.setItem('idUsuario', data.idUsuario || data.IdUsuario || data.usuarioId || 1);
+                                localStorage.setItem('nombre', data.nombreCompleto || data.NombreCompleto);
+                                localStorage.setItem('rol', data.rol || data.Rol);
+
+                                mostrarDashboard();
+                            } else {
+                                errorDiv.textContent = data.mensaje || 'Credenciales incorrectas';
+                                errorDiv.classList.remove('hidden');
+                            }
+                        } catch (error) {
+                            errorDiv.textContent = 'Error al conectar con la API.';
+                            errorDiv.classList.remove('hidden');
+                        }
+                    }
+
+                    function mostrarDashboard() {
+                        document.getElementById('loginSection').classList.add('hidden');
+                        document.getElementById('dashboardSection').classList.remove('hidden');
+
+                        document.getElementById('userName').textContent = localStorage.getItem('nombre');
+                        document.getElementById('userRole').textContent = localStorage.getItem('rol');
+
+                        paginaActual = 1;
+                        obtenerTickets(paginaActual);
+                    }
+
+                    // Obtener Tickets con Paginación
+                    async function obtenerTickets(pagina = 1) {
+                        console.log(`[API] Iniciando petición de tickets para la página: ${pagina}`);
+
+                        const token = localStorage.getItem('token');
+                        const tableBody = document.getElementById('ticketsTableBody');
+
+                        if (!token || token === "undefined" || token === "null") {
+                            if (tableBody) tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Sesión no iniciada. Por favor inicie sesión.</td></tr>';
+                            return;
+                        }
+
+                        try {
+                            if (tableBody) {
+                                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando tickets...</td></tr>';
+                            }
+
+                            const url = new URL(`${window.location.origin}/api/tickets`);
+                            url.searchParams.append('pageIndex', pagina);
+                            url.searchParams.append('pageSize', tamanoPagina);
+
+                            const response = await fetch(url.toString(), {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${token.trim()}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.status === 401) {
+                                alert("Su sesión ha expirado. Por favor, vuelva a ingresar.");
+                                logout();
+                                return;
+                            }
+
+                            if (response.ok) {
+                                const jsonResponse = await response.json();
+                                const ticketsList = jsonResponse.items || jsonResponse.data || (Array.isArray(jsonResponse) ? jsonResponse : []);
+
+                                actualizarControlesPaginacion(jsonResponse);
+
+                                if (!tableBody) return;
+                                tableBody.innerHTML = '';
+
+                                if (ticketsList.length === 0) {
+                                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay tickets registrados en esta página.</td></tr>';
+                                    return;
+                                }
+
+                                // Renderizado ÚNICO por fila con la columna de Acciones
+                                ticketsList.forEach(t => {
+                                    const id = t.idTicket || t.IdTicket || t.id || '-';
+                                    const titulo = t.titulo || t.Titulo || t.asunto || 'Sin título';
+                                    const estado = typeof t.estado === 'object' ? (t.estado?.nombreEstado || t.estado?.nombre) : (t.estado || t.Estado || 'Pendiente');
+                                    const prioridad = t.prioridad || t.Prioridad || 'Normal';
+                                    const idTecnico = t.idTecnico || t.IdTecnico;
+                                    let tecnico = 'Sin asignar';
+
+                                    if (typeof t.tecnico === 'object' && t.tecnico !== null) {
+                                        tecnico = `${t.tecnico?.nombre || ''} ${t.tecnico?.apellido || ''}`.trim() || `Técnico #${t.tecnico?.idUsuario || idTecnico}`;
+                                    } else if (t.nombreTecnico || t.tecnico) {
+                                        tecnico = t.nombreTecnico || t.tecnico;
+                                    } else if (idTecnico) {
+                                        tecnico = `Técnico #${idTecnico}`;
+                                    }
+
+                                    const row = `
+                                        <tr>
+                                            <td>${id}</td>
+                                            <td>${titulo}</td>
+                                            <td><strong>${estado}</strong></td>
+                                            <td>${prioridad}</td>
+                                            <td>${tecnico}</td>
+                                            <td>
+                                                <button class="btn-accion btn-estado" onclick="abrirModalEstado(${id}, '${estado}')">Estado</button>
+                                                <button class="btn-accion btn-asignar" onclick="abrirModalAsignar(${id})">Asignar</button>
+                                                <button class="btn-accion btn-historial" onclick="verBitacora(${id})">Bitácora</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tableBody.innerHTML += row;
+                                });
+                            } else {
+                                if (tableBody) tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Error ${response.status} al consultar tickets.</td></tr>`;
+                            }
+                        } catch (error) {
+                            console.error("[API Error] Error al obtener tickets:", error);
+                            if (tableBody) tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Error de conexión: ${error.message}</td></tr>`;
+                        }
+                    }
+
+                    // --- FUNCIONES DE ACCIONES EN EL ÁMBITO GLOBAL ---
+
+                    function abrirModalEstado(idTicket, estadoActual) {
+                        document.getElementById('modalTicketId').value = idTicket;
+                        document.getElementById('modalTipoAccion').value = 'estado';
+                        document.getElementById('modalTitulo').textContent = `Cambiar Estado (Ticket #${idTicket})`;
+
+                        document.getElementById('grupoEstado').style.display = 'block';
+                        document.getElementById('grupoTecnico').style.display = 'none';
+
+                        if (estadoActual) {
+                            document.getElementById('selectEstado').value = estadoActual;
+                        }
+
+                        document.getElementById('modalAccion').style.display = 'flex';
+                    }
+
+                    function abrirModalAsignar(idTicket) {
+                        document.getElementById('modalTicketId').value = idTicket;
+                        document.getElementById('modalTipoAccion').value = 'asignar';
+                        document.getElementById('modalTitulo').textContent = `Asignar Técnico (Ticket #${idTicket})`;
+
+                        document.getElementById('grupoEstado').style.display = 'none';
+                        document.getElementById('grupoTecnico').style.display = 'block';
+
+                        document.getElementById('modalAccion').style.display = 'flex';
+                    }
+
+                    function cerrarModalAccion() {
+                        document.getElementById('modalAccion').style.display = 'none';
+                    }
+
+                    async function guardarAccionTicket() {
+                        const token = localStorage.getItem('token');
+                        const idTicket = document.getElementById('modalTicketId').value;
+                        const tipoAccion = document.getElementById('modalTipoAccion').value;
+
+                        // Obtener el ID del usuario autenticado (asegúrate de haberlo guardado en el login)
+                        const idUsuarioActual = parseInt(localStorage.getItem('idUsuario') || '1', 10);
+
+                        if (!token) {
+                            alert("Sesión no válida");
+                            return;
+                        }
+
+                        try {
+                            let url = '';
+                            let bodyData = {};
+
+                            if (tipoAccion === 'estado') {
+                                const nuevoEstado = document.getElementById('selectEstado').value;
+
+                                url = `${API_URL}/tickets/${idTicket}/estado`;
+
+                                // Estructura idéntica a TicketUpdateStatusDto
+                                bodyData = {
+                                    IdUsuario: idUsuarioActual,
+                                    NuevoEstado: nuevoEstado,
+                                    DetalleCambio: "Cambio de estado realizado desde el panel web"
+                                };
+                            } else if (tipoAccion === 'asignar') {
+                                const idTecnicoInput = parseInt(document.getElementById('inputTecnico').value, 10);
+
+                                if (!idTecnicoInput) {
+                                    alert("Por favor ingrese un ID de técnico válido.");
+                                    return;
+                                }
+
+                                url = `${API_URL}/tickets/${idTicket}/asignar`;
+
+                                bodyData = {
+                                    IdTecnico: idTecnicoInput,
+                                    IdUsuarioAsignador: idUsuarioActual
+                                };
+                            }
+
+                            const response = await fetch(url, {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': `Bearer ${token.trim()}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(bodyData)
+                            });
+
+                            const data = await response.json().catch(() => ({}));
+
+                            if (response.ok) {
+                                cerrarModalAccion();
+                                alert(data.mensaje || "Estado del ticket actualizado exitosamente.");
+                                obtenerTickets(paginaActual);
+                            } else {
+                                let mensajeError = data.mensaje || "Error al actualizar el ticket.";
+                                if (data.errors) {
+                                    mensajeError += "\n" + JSON.stringify(data.errors, null, 2);
+                                }
+                                alert(`Error ${response.status}: ${mensajeError}`);
+                            }
+                        } catch (error) {
+                            console.error("Error al guardar acción:", error);
+                            alert("Error de conexión al actualizar el ticket.");
+                        }
+                    }
+
+                    function actualizarControlesPaginacion(data) {
+                        paginaActual = parseInt(data.paginaActual || data.PaginaActual || paginaActual || 1, 10);
+                        const totalPaginas = parseInt(data.totalPaginas || data.TotalPaginas || 1, 10);
+                        const totalRegistros = parseInt(data.totalRegistros || data.TotalRegistros || 0, 10);
+
+                        const tieneAnterior = (data.tienePaginaAnterior !== undefined ? data.tienePaginaAnterior : data.TienePaginaAnterior)
+                            ?? (paginaActual > 1);
+
+                        const tieneSiguiente = (data.tienePaginaSiguiente !== undefined ? data.tienePaginaSiguiente : data.TienePaginaSiguiente)
+                            ?? (paginaActual < totalPaginas);
+
+                        const infoSpan = document.getElementById('infoPaginacion');
+                        if (infoSpan) {
+                            infoSpan.textContent = `Página ${paginaActual} de ${totalPaginas} (${totalRegistros} tickets en total)`;
+                        }
+
+                        const btnAnterior = document.getElementById('btnAnterior');
+                        const btnSiguiente = document.getElementById('btnSiguiente');
+
+                        if (btnAnterior) btnAnterior.disabled = !tieneAnterior;
+                        if (btnSiguiente) btnSiguiente.disabled = !tieneSiguiente;
+                    }
+
+                    function cambiarPagina(delta) {
+                        const paginaNum = parseInt(paginaActual, 10) || 1;
+                        const nuevaPagina = paginaNum + delta;
+
+                        if (nuevaPagina >= 1) {
+                            paginaActual = nuevaPagina;
+
+                            const btnAnterior = document.getElementById('btnAnterior');
+                            const btnSiguiente = document.getElementById('btnSiguiente');
+                            if (btnAnterior) btnAnterior.disabled = true;
+                            if (btnSiguiente) btnSiguiente.disabled = true;
+
+                            obtenerTickets(nuevaPagina);
+                        }
+                    }
+
+                    function logout() {
+                        localStorage.clear();
+                        document.getElementById('dashboardSection').classList.add('hidden');
+                        document.getElementById('loginSection').classList.remove('hidden');
+                    }
+
+                    window.onload = function() {
+                        if (localStorage.getItem('token')) {
+                            mostrarDashboard();
+                        }
+};
+
+                // Función para abrir el modal y cargar la bitácora
+                async function verBitacora(idTicket) {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        alert("Sesión no válida");
+                        return;
+                    }
+
+                    document.getElementById('bitacoraTicketId').innerText = idTicket;
+                    const tbody = document.getElementById('tablaBitacoraBody');
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cargando historial...</td></tr>';
+
+                    // Mostrar el modal
+                    document.getElementById('modalBitacora').style.display = 'block';
+
+                    try {
+                        // Llama exactamente a tu endpoint: api/bitacora/ticket/{idTicket}
+                        const response = await fetch(`${API_URL}/bitacora/ticket/${idTicket}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token.trim()}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.status === 404) {
+                            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay historial registrado para este ticket.</td></tr>';
+                            return;
+                        }
+
+                        if (!response.ok) {
+                            throw new Error(`Error ${response.status}: No se pudo obtener la bitácora.`);
+                        }
+
+                        const historial = await response.json();
+                        tbody.innerHTML = '';
+
+                        if (!historial || historial.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay historial registrado para este ticket.</td></tr>';
+                            return;
+                        }
+
+                        historial.forEach(item => {
+                            // Formatear la fecha ingresada desde C#
+                            const fechaObj = new Date(item.fecha || item.Fecha);
+                            const fechaFormateada = fechaObj.toLocaleString();
+
+                            const usuario = item.nombreUsuario || item.NombreUsuario || `Usuario #${item.idUsuario || item.IdUsuario}`;
+                            const estadoAnt = item.estadoAnterior || item.EstadoAnterior || '-';
+                            const estadoNvo = item.estadoNuevo || item.EstadoNuevo || '-';
+                            const comentario = item.comentario || item.Comentario || '';
+
+                            const row = `
+                                <tr>
+                                    <td>${fechaFormateada}</td>
+                                    <td>${usuario}</td>
+                                    <td><span class="badge badge-secundario">${estadoAnt}</span></td>
+                                    <td><span class="badge badge-primario">${estadoNvo}</span></td>
+                                    <td>${comentario}</td>
+                                </tr>
+                            `;
+                            tbody.innerHTML += row;
+                        });
+
+                    } catch (error) {
+                        console.error("Error al consultar bitácora:", error);
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">${error.message}</td></tr>`;
+                    }
+                }
+
+                function cerrarModalBitacora() {
+                    document.getElementById('modalBitacora').style.display = 'none';
+                }
+
+                // Función para cerrar el modal
+                function cerrarModalBitacora() {
+                    document.getElementById('modalBitacora').style.display = 'none';
+                }
+
+
+                // Abrir y cerrar modal de creación
+                function abrirModalCrearTicket() {
+                    document.getElementById('formCrearTicket').reset();
+                    document.getElementById('modalCrearTicket').style.display = 'flex';
+                }
+
+                function cerrarModalCrearTicket() {
+                    document.getElementById('modalCrearTicket').style.display = 'none';
+                }
+
+                // Enviar la petición POST al backend
+                async function guardarNuevoTicket(event) {
+                    event.preventDefault(); // Evita recargar la página
+
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        alert("Sesión no válida");
+                        return;
+                    }
+
+                    const idUsuarioActual = parseInt(localStorage.getItem('idUsuario') || '1', 10);
+                    const titulo = document.getElementById('nuevoTitulo').value.trim();
+                    const descripcion = document.getElementById('nuevaDescripcion').value.trim();
+                    const prioridad = document.getElementById('nuevaPrioridad').value;
+
+                    const payload = {
+                        Titulo: titulo,
+                        Descripcion: descripcion,
+                        Prioridad: prioridad,
+                        IdUsuario: idUsuarioActual
+                    };
+
+                    try {
+                        const response = await fetch(`${API_URL}/tickets`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token.trim()}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await response.json().catch(() => ({}));
+
+                        if (response.ok) {
+                            cerrarModalCrearTicket();
+                            alert("Ticket creado exitosamente.");
+                            obtenerTickets(1); // Recarga la primera página para ver el nuevo ticket
+                        } else {
+                            let mensajeError = data.mensaje || "Error al crear el ticket.";
+                            if (data.errors) {
+                                mensajeError += "\n" + JSON.stringify(data.errors, null, 2);
+                            }
+                            alert(`Error ${response.status}: ${mensajeError}`);
+                        }
+                    } catch (error) {
+                        console.error("Error al crear ticket:", error);
+                        alert("Error de conexión al intentar crear el ticket.");
+                    }
+                }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+wwwroot\index.html
+C:\Users\Rolando\Desktop\BD\Proyecto Final\GlobalTech\wwwroot\index.html

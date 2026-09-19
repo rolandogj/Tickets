@@ -1,6 +1,220 @@
 @GlobalTech_HostAddress = http://localhost:5145
 
-GET {{GlobalTech_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. Prueba de Login Exitoso (Credenciales Correctas)
+POST {{GlobalTech_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "nombreUsuario": "rolandogj",
+  "password": "123"
+}
 
 ###
+
+### 2. Prueba de Login Fallido (Contraseña Incorrecta)
+POST {{GlobalTech_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "nombreUsuario": "jgarcia",
+  "password": "password_incorrecto"
+}
+
+###
+
+### 3. Prueba de Validación DTO (Campos Vacíos)
+POST {{GlobalTech_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "nombreUsuario": "",
+  "password": ""
+}
+
+
+### 4. Crear un nuevo Ticket (Prioridad Crítica)
+POST {{GlobalTech_HostAddress}}/api/tickets
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "descripcion": "Fallo total en el servidor de base de datos principal.",
+  "prioridad": "Critica"
+}
+
+###
+
+### 5. Obtener todos los Tickets
+GET {{GlobalTech_HostAddress}}/api/tickets
+
+###
+
+### 6. Consultar Reporte de Alerta Roja (Departamentos con > 5 tickets críticos)
+GET {{GlobalTech_HostAddress}}/api/tickets/reporte/alerta-roja
+
+###
+
+
+### 7. Actualizar estado de Ticket #10 a "En Proceso"
+PUT {{GlobalTech_HostAddress}}/api/tickets/10/estado
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "nuevoEstado": "En Proceso"
+}
+
+###
+
+### 8. Consultar todo el historial de auditoría
+GET {{GlobalTech_HostAddress}}/api/bitacora
+
+###
+
+### 9. Consultar la bitácora específica del Ticket #10
+GET {{GlobalTech_HostAddress}}/api/bitacora/ticket/10
+
+###
+
+### 10. Asignar o reasignar técnico al Ticket #10
+PUT {{GlobalTech_HostAddress}}/api/tickets/10/asignar
+Content-Type: application/json
+
+{
+  "idTecnico": 2,
+  "idUsuarioAsignador": 1
+}
+
+###
+
+
+### Consultar la bitácora específica del Ticket #10 con el nombre del usuario
+GET {{GlobalTech_HostAddress}}/api/bitacora/ticket/10
+
+###
+
+
+### Resolver o cerrar ticket con comentario de solución
+PUT {{GlobalTech_HostAddress}}/api/tickets/10/resolver
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "estadoFinal": "Resuelto",
+  "solucion": "Se reinstaló el controlador de red y se verificó la conectividad a la BD."
+}
+
+###
+
+### 1. Cerrar el Ticket #10
+PUT {{GlobalTech_HostAddress}}/api/tickets/10/resolver
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "estadoFinal": "Cerrado",
+  "solucion": "El problema se resolvió definitivamente y el cliente confirmó la conformidad."
+}
+
+###
+
+### 2. Intentar cambiar el estado a un ticket cerrado (Debe retornar 400 Bad Request)
+PUT {{GlobalTech_HostAddress}}/api/tickets/10/estado
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "nuevoEstado": "En Proceso"
+}
+
+###
+
+
+### 1. Obtener todos los tickets sin filtros
+GET {{GlobalTech_HostAddress}}/api/tickets
+
+### 2. Filtrar tickets por estado "En Proceso"
+GET {{GlobalTech_HostAddress}}/api/tickets?estado=En%20Proceso
+
+### 3. Filtrar tickets asignados al técnico #2
+GET {{GlobalTech_HostAddress}}/api/tickets?idTecnico=2
+
+### 4. Combinar filtros: Tickets "En Proceso" asignados al técnico #2
+GET {{GlobalTech_HostAddress}}/api/tickets?estado=En%20Proceso&idTecnico=2
+
+###
+
+### Obtener métricas y resumen de tickets agrupados por estado
+GET {{GlobalTech_HostAddress}}/api/tickets/metricas
+
+###
+
+
+### 1. Obtener primera página (10 registros por defecto)
+GET {{GlobalTech_HostAddress}}/api/tickets
+
+### 2. Obtener la página 2 con tamaño de página personalizado (5 registros)
+GET {{GlobalTech_HostAddress}}/api/tickets?pageIndex=2&pageSize=5
+
+### 3. Combinar filtros y paginación
+GET {{GlobalTech_HostAddress}}/api/tickets?estado=Abierto&pageIndex=1&pageSize=5
+
+
+
+
+### ===================================================================
+### PRUEBAS DE LA BITÁCORA CON PAGINACIÓN Y FILTROS
+### ===================================================================
+
+### 1. Consultar primera página de la bitácora (10 registros por defecto)
+GET {{GlobalTech_HostAddress}}/api/bitacora
+
+### 2. Consultar la bitácora paginada (Página 1, 5 registros)
+GET {{GlobalTech_HostAddress}}/api/bitacora?pageIndex=1&pageSize=10
+
+### 3. Consultar la página 2 de la bitácora (5 registros)
+GET {{GlobalTech_HostAddress}}/api/bitacora?pageIndex=2&pageSize=10
+
+### 4. Consultar la bitácora filtrada por un ticket específico (#10) y paginada
+GET {{GlobalTech_HostAddress}}/api/bitacora?idTicket=10&pageIndex=1&pageSize=5
+
+
+
+
+
+# ==========================================
+# 1. DEFINICIÓN DE VARIABLES (Siempre al inicio)
+# ==========================================
+@hostname = localhost
+@port = 5000
+@baseUrl = http://{http://localhost:5145}/api
+
+# Pega aquí tu token generado en el Login (sin comillas)
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUZWNuaWNvIiwianRpIjoiY2NjNzAwZTEtOTk4OS00MDc5LTk4M2MtYmNhNGNmNzc3ZWJhIiwiZXhwIjoxNzg5ODA2NjM5fQ.42MGjbs1vawQ6WQErPzSKC47P3IR43jeVVKh70Ekd6A
+
+###
+
+# ==========================================
+# 2. PETICIONES HTTP
+# ==========================================
+
+### 1. Iniciar Sesión (Login)
+POST {{GlobalTech_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "nombre_usuario" "rolandogj",
+  "password": "123"
+}
+
+###
+
+### 2. Consultar Tickets (Protegido con JWT)
+GET {{GlobalTech_HostAddress}}/tickets
+Authorization: Bearer {{authToken}}
+
+###
+
+### 3. Consultar Bitácora
+GET {{baseUrl}}/bitacora
+Authorization: Bearer {{authToken}}
