@@ -1,0 +1,124 @@
+tabla usuarios:
+id_usuario (PK)
+nombre_usuario 
+apellido_usuario
+correo
+nombre_usuario
+password_hash 
+id_departamento (FK) tabla departamentos:
+id_rol (FK) tabla rol:
+
+
+tabla departamentos:
+id_departamento (PK)
+nombre_departamento
+
+
+tabla rol:
+id_rol (PK)
+nombre_rol 
+
+
+
+tabla tickets:
+id_ticket (PK)
+id_usuario (FK) tabla usuarios:
+id_tecnico (FK) tabla usuarios: null 
+fecha_creacion
+descripcion
+prioridad
+estado
+
+tabla bitacora:
+id_bitacora (PK)
+id_ticket (FK) tabla tickets:
+id_usuario (FK) tabla usuarios:
+comentario
+estado_anterior
+estado_nuevo
+fecha_registro
+
+
+
+CREATE TABLE departamentos (
+	id_departamento SERIAL PRIMARY KEY,
+	nombre_departamento VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE rol (
+	id_rol SERIAL PRIMARY KEY,
+	nombre_rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE usuarios (
+	id_usuario SERIAL PRIMARY KEY,
+	nombre VARCHAR(50),
+	apellido VARCHAR(50),
+	correo VARCHAR(100) NOT NULL UNIQUE,
+	nombre_usuario VARCHAR(25),
+	password_hash VARCHAR(255) NOT NULL,
+	id_departamento INT REFERENCES departamentos(id_departamento),
+	id_rol INT REFERENCES rol(id_rol)
+);
+
+CREATE TABLE tickets (
+	id_ticket SERIAL PRIMARY KEY,
+	id_usuario INT REFERENCES usuarios(id_usuario),
+	id_tecnico INT REFERENCES usuarios(id_usuario),
+	fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	descripcion TEXT NOT NULL,
+	prioridad VARCHAR(20) NOT NULL CHECK (prioridad IN ('Baja','Media','Alta','Critica')),
+	estado VARCHAR(20) NOT NULL CHECK (estado IN ('Abierto','En Progreso','Resuelto'))
+);
+
+CREATE TABLE bitacora (
+	id_bitacora SERIAL PRIMARY KEY,
+	id_ticket INT REFERENCES tickets(id_ticket),
+	id_usuario INT REFERENCES usuarios(id_usuario),
+	comentario TEXT NOT NULL,
+	estado_anterio VARCHAR(20),
+	estado_nuevo VARCHAR(20) NOT NULL,
+	fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO departamentos (nombre_departamento) VALUES
+('Sistemas'),
+('Recursos Humanos'),
+('Finanzas'),
+('Ventas');
+
+INSERT INTO rol (nombre_rol) VALUES
+('Empleado'),
+('Tecnico');
+
+INSERT INTO usuarios (nombre, apellido, correo,	nombre_usuario, password_hash, id_departamento,	id_rol) VALUES
+('Rolando', 'Garcia', 'rolando@globaltech.com', 'rolandogj', '123', 1, 2),
+('Clara', 'Quintanilla', 'clara@globaltech.com', 'clarac', '123', 2, 1),
+('Kevin', 'Martinez', 'kevin@globaltech.com', 'kevinm', '123', 3, 1),
+('Priscila', 'Lopez', 'priscila@globaltech.com', 'priscilal', '123', 4, 1);
+
+
+INSERT INTO tickets (id_usuario, descripcion, prioridad, estado) VALUES
+(2, 'no enciende la computadora', 'Media', 'Abierto'),
+(3, 'el monitor no da imagen', 'Baja', 'Abierto'),
+(4, 'no enciende la computadora', 'Critica', 'Abierto'),
+(4, 'el monitor no da imagen', 'Critica', 'Abierto'),
+(4, 'tengo problema con el sonido', 'Critica', 'Abierto'),
+(4, 'la impresora solo hace ruido pero no jala la hoja', 'Critica', 'Abierto'),
+(4, 'no tengo internet', 'Critica', 'Abierto'),
+(4,'el teclado no responde', 'Critica', 'Abierto');
+
+
+SELECT 
+	d.nombre_departamento,
+	COUNT(t.id_ticket) AS total_criticos
+FROM tickets t 
+INNER JOIN usuarios u ON t.id_usuario = u.id_usuario
+INNER JOIN departamentos d ON u.id_departamento = d.id_departamento
+WHERE t.prioridad = 'Critica'
+GROUP BY d.nombre_departamento
+HAVING COUNT(t.id_ticket) > 5;
+
+
+
